@@ -11,24 +11,20 @@ import java.util.ArrayList;
  * @author ALJANN
  */
 public class Equipment {
-    //protected ArrayList<String> details = new ArrayList<>();
-    protected String name;
-    protected String condition;
     protected String id;
+    protected String name;
+    protected String type;
+    protected String condition;
     protected String location;
-    private int equipmentNumber;
-    
-    Equipment(String name, String condition, String id, String location)
-    {
-        this.name = name;
-        this.condition = condition;
+    protected String quantity;
+
+    public Equipment(String id, String name, String type, String condition,
+            String location, String quantity) {
         this.id = id;
+        this.name = name;
+        this.type = type;
+        this.condition = condition;
         this.location = location;
+        this.quantity = quantity;
     }
-    
-    public void addEquipment()
-    {
-        equipmentNumber++;
-    }
-    
 }

@@ -5,6 +5,11 @@
 package com.jakilan.myapps;
 import GUI.*;
 import SQL.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,8 +25,8 @@ public class mainClass  {
         since we use an offline database, our job is ez
         */
         
-        Connect conn = new Connect();
-        conn.connect();
+//        Connect conn = new Connect();
+//        conn.connect();
         
         /* 
         when main program starts, login jframe is instantiated first:
@@ -61,6 +66,34 @@ public class mainClass  {
         
         //new mainGUI();
         //new mainFrame();
-        new backupMainGui();
+        new MainGui();
+        
+        
+//        String f = "src\\sample.csv";
+//        String line = "";
+//        String[] samp = null;
+//        ArrayList<String[]> ls = new ArrayList<>();
+//        
+//        
+//        int counterCol = 0;
+//        int counterRow = 0;
+//        char red = 0;
+//        
+//        
+//        try {
+//            BufferedReader br = new BufferedReader(new FileReader(f));
+//            while((line = br.readLine()) != null)
+//            {
+//                ls.add(line.split(","));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        
+//        for (String[] s:ls)
+//        {
+//            System.out.println(Arrays.toString(s));
+//        }
+            
     }
 }

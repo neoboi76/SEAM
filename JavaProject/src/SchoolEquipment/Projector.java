@@ -9,9 +9,10 @@ package SchoolEquipment;
  * @author ALJANN
  */
 public class Projector extends Equipment {
-    public Projector(String name, String condition, String id, String location)
-    {
-        super(name, condition, id, location);
+
+    public Projector(String id, String name, String type, String condition,
+            String location, String quantity) {
+        super(id, name, type, condition, location, quantity);
     }
-    
+
 }

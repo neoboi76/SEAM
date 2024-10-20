@@ -1,0 +1,7 @@
+ID,Name,Type,Condition,Location,Quantity
+100,Jack,Printer,Good,MKT310,5
+200,Namco,Eraser,Bad,MKT500,10
+300,Selaco,Computer,Excellent,MKT500,10
+400,,Eraser,Decent,MKT501,12
+500,,Eraser,Decent,MKT602,12
+600,ShowMeTheMoney,Some Shit,Decent,MKT500,900

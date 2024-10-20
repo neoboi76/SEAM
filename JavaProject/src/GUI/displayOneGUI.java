@@ -16,7 +16,7 @@ public class displayOneGUI {
     JFrame frame = new JFrame();
     JLabel label = new JLabel();
 
-    public displayOneGUI(mainGUI main) {
+    public displayOneGUI(notMainGui main) {
         label.setText("Hello bitches");
         label.setBounds(300,300,0,0);
         
