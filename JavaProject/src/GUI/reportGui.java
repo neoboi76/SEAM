@@ -12,7 +12,7 @@ import javax.swing.JDialog;
  */
 public class reportGui extends JDialog {
     
-    reportGui()
+    public reportGui()
     {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(300,500);

@@ -9,9 +9,14 @@ package SchoolEquipment;
  * @author ALJANN
  */
 public class Computer extends Equipment{
-
     public Computer(String id, String name, String type, String condition,
             String location, String quantity) {
         super(id, name, type, condition, location, quantity);
     }
+
+    public Computer(String[] str) {
+        super(str);
+    }
+    
+
 }

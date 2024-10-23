@@ -1,32 +1,29 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+*   MainGui is a JFrame container which acts as the main Graphical User Interface (GUI)
+*   For this SEAM project. MainGui acts upon a Singleton design pattern aka it is
+*   only instantiated once.
+*
+*
+*
+*/
 package GUI;
 
 import CSV.CSVreader;
+import CSV.CSVwriter;
 import CSV.SingleFileRootViewer;
+import SchoolEquipment.Equipment;
+import SchoolEquipment.EquipmentFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import javax.imageio.ImageIO;
+import java.util.HashMap;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultRowSorter;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,18 +38,14 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
-import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -65,24 +58,33 @@ public class MainGui {
     private String file = "src\\sample.csv";
     private String realFile = "";
     
+    //temp equipment arraylist
+    private ArrayList<Equipment> eq = new ArrayList<>();
+    
+    //temp equipment hashmap<equipment id, equipment>
+    private HashMap<String,Equipment> equipmentHashmap = new HashMap<>();
+    
     //initialize image components
     private ImageIcon clearImage = new ImageIcon(getClass().getClassLoader().getResource("Images/clearImageResized.png"));
     private ImageIcon deleteImage = new ImageIcon(getClass().getClassLoader().getResource("Images/deleteImageResized.png"));
     private ImageIcon saveImage = new ImageIcon(getClass().getClassLoader().getResource("Images/saveImageResized.png"));
     private ImageIcon replaceImage = new ImageIcon(getClass().getClassLoader().getResource("Images/replaceImageResized.png"));
     private ImageIcon insertImage = new ImageIcon(getClass().getClassLoader().getResource("Images/insertImageResized.png"));
+    private ImageIcon exportImage = new ImageIcon(getClass().getClassLoader().getResource("Images/exportImageResized.png"));
     
     private ImageIcon clearImageGlow = new ImageIcon(getClass().getClassLoader().getResource("Images/clearImageGlowResized.png"));
     private ImageIcon deleteImageGlow = new ImageIcon(getClass().getClassLoader().getResource("Images/deleteImageGlowResized.png"));
     private ImageIcon saveImageGlow = new ImageIcon(getClass().getClassLoader().getResource("Images/saveImageGlowResized.png"));
     private ImageIcon replaceImageGlow = new ImageIcon(getClass().getClassLoader().getResource("Images/replaceImageGlowResized.png"));
     private ImageIcon insertImageGlow = new ImageIcon(getClass().getClassLoader().getResource("Images/insertImageGlowResized.png"));
+    private ImageIcon exportImageGlow = new ImageIcon(getClass().getClassLoader().getResource("Images/exportImageGlowResized.png"));
     
     private ImageIcon clearImageBlack = new ImageIcon(getClass().getClassLoader().getResource("Images/clearImageBlackResized.png"));
     private ImageIcon deleteImageBlack = new ImageIcon(getClass().getClassLoader().getResource("Images/deleteImageBlackResized.png"));
     private ImageIcon saveImageBlack = new ImageIcon(getClass().getClassLoader().getResource("Images/saveImageBlackResized.png"));
     private ImageIcon replaceImageBlack = new ImageIcon(getClass().getClassLoader().getResource("Images/replaceImageBlackResized.png"));
     private ImageIcon insertImageBlack = new ImageIcon(getClass().getClassLoader().getResource("Images/insertImageBlackResized.png"));
+    private ImageIcon exportImageBlack = new ImageIcon(getClass().getClassLoader().getResource("Images/exportImageBlackResized.png"));
     
     //main JFrame for the main program
     private JFrame guiFrame = new JFrame();
@@ -97,6 +99,8 @@ public class MainGui {
     private JButton newButton = new JButton("new");
     private JButton openButton = new JButton("open");
     private JButton quitButton = new JButton();
+    private JButton reportButton = new JButton("report");
+    private JButton exportButton = new JButton(exportImage);
     
     //JPanels dividing the area inside guiFrame
     private JLayeredPane majorPane = new JLayeredPane();
@@ -115,30 +119,35 @@ public class MainGui {
     private JLabel programTitle = new JLabel();
     
     //Contents inside the JPanel extraArea
+    String[] locations = {"All", "MKT500", "MKT310", "MKT602"};
+    String[] equipments = {"All", "Printer", "Projector", "Speakers", "Computer", "Monitor"};
     private JLabel searchFieldLabel = new JLabel("Search: ");
     private JTextField searchField = new JTextField();
     private JLabel roomsFieldLabel = new JLabel("Rooms: ");
-    String[] locations = {"All","MKT500","MKT310","MKT602"};
-    private JComboBox roomsDropdown;
+    private JLabel equipmentsFieldLabel = new JLabel("Type:     ");
+    private JComboBox roomDropdown;
+    private JComboBox equipmentDropdown;
     
     //JTable components + additives
-    private String[][] normalRowContent = new String[1][1];
-    private String[] normalColumnContent = new CSVreader(file).col;
+    private String[][] normalRowContent = new String[0][0];
+    private String[] normalColumnContent = new CSVreader(file).getCol();
     private JTable tb;
     private JScrollPane sp;
     private DefaultTableModel dtm;
-    private TableRowSorter trs;
+    private TableRowSorter<DefaultTableModel> trs;
+    private ArrayList<RowFilter<Object,Object>> filters = new ArrayList<RowFilter<Object,Object>>(3);
+    private RowFilter<Object,Object> mainFilter;
     
     //JFileChooser + components
     private File root = new File("./src");
     private FileSystemView fsv = new SingleFileRootViewer(root);
     private JFileChooser fileChooser = new JFileChooser(fsv);
+    private FileNameExtensionFilter allowedFiles = new FileNameExtensionFilter("Comma Separated Values", "csv");
     
     //testing panellized button invisible
     private JButton sampleButton = new JButton("sample");
     
     //JFrame constructor
-    
     public MainGui()
     {
         
@@ -221,6 +230,12 @@ public class MainGui {
         //newButton.setDisabledIcon(insertImageBlack);
         openButton.setPreferredSize(new Dimension(80,52));
         //newButton.setDisabledIcon(insertImageBlack);
+        reportButton.setPreferredSize(new Dimension(80,52));
+        //newButton.setDisabledIcon(insertImageBlack);
+        exportButton.setPreferredSize(new Dimension(160,20));
+        exportButton.setDisabledIcon(exportImageBlack);
+        exportButton.setEnabled(true);
+        
         //End of button characteristics
         
         SwingUtilities.invokeLater(() -> {
@@ -242,10 +257,26 @@ public class MainGui {
             });
         });
         
+        reportButton.addActionListener((e) ->{
+            if (!equipmentHashmap.isEmpty())
+                System.out.println(equipmentHashmap);
+            else 
+                System.out.println("Empty hashmap");
+        });
+        
+        exportButton.addActionListener((e) ->{
+            if (!equipmentHashmap.isEmpty())
+                new CSVwriter(equipmentHashmap);
+            else
+                JOptionPane.showMessageDialog(null, "No rows to export!", "Empty Table!", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
         openButton.addActionListener((e) -> {
             int choice = JOptionPane.showConfirmDialog(null, "Open a new .cvs file?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION)
             {
+                fileChooser.setFileFilter(allowedFiles);
+                fileChooser.setAcceptAllFileFilterUsed(false);
                 int open = fileChooser.showOpenDialog(null);
                 String root2;
 
@@ -253,28 +284,30 @@ public class MainGui {
                 {
                     root2 = fileChooser.getSelectedFile().getAbsolutePath();
                     CSVreader reading = new CSVreader(root2);
+                    equipmentHashmap = new EquipmentFactory().createHashMapEquipFromFile(reading);
                     dtm.setRowCount(0);
-                    dtm.setDataVector(reading.rows, normalColumnContent);
+                    dtm.setDataVector(reading.getTrueRows(), normalColumnContent);
                 }
             }
-            
-            
-        });
+        });// end of openButton ActionListener
         
         newButton.addActionListener((e) -> {
             int choice = JOptionPane.showConfirmDialog(null, "Start a new table?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION)
             {
-                dtm.setRowCount(0);
+                resetValues();
             }
         });
         
         insertButton.addActionListener((e) -> {
-            insertGui ig = new insertGui(this);
+            insertGui ig = new insertGui(this,equipmentHashmap);
             ig.setVisible(true);
             
             if (ig.newS != null)
+            {
                 dtm.addRow(ig.newS);
+                equipmentHashmap.put(ig.newS[0], new EquipmentFactory().createEquipmentFromInsert(ig.newS));
+            }
         });
         
         //start of button icon listener
@@ -360,15 +393,29 @@ public class MainGui {
                     saveButton.setIcon(saveImage);
             }
         });
+        exportButton.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                    exportButton.setIcon(exportImageGlow);
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                    exportButton.setIcon(exportImage);
+            }
+        });
         //end of button icon listener
         
         deleteButton.addActionListener((ActionEvent e) -> {
             int choice = JOptionPane.showConfirmDialog(null, "Do you want to delete this row?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION)
             {
-                int i = tb.getSelectedRow();
-                int j = tb.convertRowIndexToModel(i);
-                dtm.removeRow(j);
+                System.out.println((String)dtm.getValueAt(tb.convertRowIndexToModel(tb.getSelectedRow()),tb.convertColumnIndexToModel(0))+" has been removed.");
+                equipmentHashmap.remove((String) dtm.getValueAt(tb.convertRowIndexToModel(tb.getSelectedRow()),tb.convertColumnIndexToModel(0)));
+                dtm.removeRow(tb.convertRowIndexToModel(tb.getSelectedRow()));
                 deleteButton.setIcon(deleteImage); 
                 JOptionPane.showMessageDialog(null, "Row has been deleted.");
             }
@@ -385,84 +432,96 @@ public class MainGui {
         eastArea.add(insertButton);
         eastArea.add(newButton);
         eastArea.add(openButton);
+        eastArea.add(reportButton);
+        eastArea.add(exportButton);
         majorPane.add(eastArea, BorderLayout.EAST);
         
         /*END OF EASTAREA*/
         
         /*START OF EXTRAAREA*/
-        extraArea.setLayout(new FlowLayout());
+        extraArea.setLayout(new FlowLayout(FlowLayout.CENTER));
         extraArea.setBorder(BorderFactory.createLineBorder(Color.blue));
         extraArea.setBackground(new Color(28, 25, 26));
-        extraArea.setPreferredSize(new Dimension(250,200));
+        extraArea.setPreferredSize(new Dimension(210,200));
         
-        searchField.setPreferredSize(new Dimension(150,25));
+        roomDropdown = new JComboBox<>(locations);
+        equipmentDropdown = new JComboBox<>(equipments);
+        
+        Runnable updateRows = () -> {
+            String searchText = searchField.getText().toLowerCase();
+            String selectedRoom = String.valueOf(roomDropdown.getSelectedItem());
+            String selectedEquipment = equipmentDropdown.getSelectedItem().toString();
+            
+            ArrayList<RowFilter<Object, Object>> filt = new ArrayList<>();
+
+            filt.add(RowFilter.regexFilter("(?i)^" + searchText));
+            
+            RowFilter<Object, Object> rf = RowFilter.regexFilter("(?i)^" + searchText); // filter by search text in Name column
+
+            // Filter by location
+            if (!"All".equals(selectedRoom))
+                filt.add(RowFilter.regexFilter(String.valueOf(roomDropdown.getSelectedItem())));
+
+
+            // Filter by type
+            if (!"All".equals(selectedEquipment))
+                filt.add(RowFilter.regexFilter(String.valueOf(equipmentDropdown.getSelectedItem())));
+            
+            mainFilter = RowFilter.andFilter(filt);
+
+            trs.setRowFilter(mainFilter); 
+        };
+        
+        searchField.setPreferredSize(new Dimension(130,25));
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener()
         {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                search(searchField.getText());
-                //printing(searchField.getText());
-            }
-
+                    updateRows.run();}
+            
             @Override
             public void removeUpdate(DocumentEvent e) {
-                search(searchField.getText());
-                //printing(searchField.getText());
-            }
+                updateRows.run();}
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                search(searchField.getText());
-                //printing(searchField.getText());
-            }
-            public void search(String str)
-            {
-                if (str.length()==0)
-                    trs.setRowFilter(null);
-                else
-                {
-                    trs.setRowFilter(RowFilter.regexFilter("(?i)^"+str));
-                    System.out.println(tb.getRowCount());
-                }
-            }
+                updateRows.run();}
             public void printing(String str)
             {
                 for (int i = 0; i < tb.getRowCount(); i++) 
                     for (int j = 0; j < tb.getColumnCount(); j++)
                     {
                         String faker = (String) dtm.getValueAt(tb.convertRowIndexToModel(i),tb.convertColumnIndexToModel(j)); //jack
-                            //faker = faker.substring(0, faker.length()-(faker.length()-str.length()));
-                            //dtm.setValueAt(str+(), tb.convertRowIndexToModel(i),tb.convertColumnIndexToModel(j));
-                            System.out.println(faker);
+                        System.out.println(faker);
   
                     }
             }
-            
-            
         });
         
         searchFieldLabel.setForeground(Color.white);
         
-        roomsDropdown = new JComboBox<>(locations);
-        roomsDropdown.setPreferredSize(new Dimension(150,25));
-        roomsDropdown.addItemListener((ItemEvent e) -> {
-            if (null != String.valueOf(roomsDropdown.getSelectedItem()))
-                switch (String.valueOf(roomsDropdown.getSelectedItem())) {
-                    case "All" -> trs.setRowFilter(null);
-                    case "MKT500" -> trs.setRowFilter(RowFilter.regexFilter("MKT500"));
-                    case "MKT310" -> trs.setRowFilter(RowFilter.regexFilter("MKT310"));
-                    case "MKT602" -> trs.setRowFilter(RowFilter.regexFilter("MKT602"));
-                    default -> {
-                }
-                }
+        roomDropdown.setPreferredSize(new Dimension(130,25));
+        roomDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                updateRows.run();
+            }
         });
-        
         roomsFieldLabel.setForeground(Color.white);
+        
+        equipmentDropdown.setPreferredSize(new Dimension(130,25));
+        equipmentDropdown.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                updateRows.run();
+            }
+        });
+        equipmentsFieldLabel.setForeground(Color.white);
         
         extraArea.add(searchFieldLabel);
         extraArea.add(searchField);
         extraArea.add(roomsFieldLabel);
-        extraArea.add(roomsDropdown);
+        extraArea.add(roomDropdown);
+        extraArea.add(equipmentsFieldLabel);
+        extraArea.add(equipmentDropdown);
         
         majorPane.add(extraArea, BorderLayout.WEST);
         /*END OF EXTRAAREA*/
@@ -481,9 +540,9 @@ public class MainGui {
         
     }
     
-    
-    public void changeToTable()
+    public void resetValues()
     {
-        
+        dtm.setRowCount(0);
+        equipmentHashmap.clear();
     }
 }

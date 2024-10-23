@@ -5,6 +5,7 @@
 package SchoolRooms;
 
 import SchoolEquipment.Equipment;
+import java.util.HashMap;
 
 /**
  *
@@ -13,15 +14,15 @@ import SchoolEquipment.Equipment;
 public class Room {
     private String name;
     private String number;
-    private String id;
+    private String floorId;
     private int floorNumber;
-    private Equipment[] equipments = null;
-    private int equipmentCount = equipments.length;
+    private HashMap<String,Equipment> hashEq = new HashMap<>();
+    private int equipmentCount = hashEq.size();
 
-    public Room(String name, String number, String id, int floorNumber) {
+    public Room(String name, String number, String floorId, int floorNumber) {
         this.name = name;
         this.number = number;
-        this.id = id;
+        this.floorId = floorId;
         this.floorNumber = floorNumber;
     }
 }

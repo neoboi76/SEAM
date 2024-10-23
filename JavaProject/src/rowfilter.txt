@@ -1,0 +1,78 @@
+import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class FilterExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Filter Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        // Sample data
+        String[] columns = {"Name", "Age", "Country"};
+        Object[][] data = {
+            {"John", 25, "USA"},
+            {"Alice", 30, "UK"},
+            {"Bob", 28, "Canada"},
+            {"Carol", 35, "USA"},
+            {"David", 40, "UK"}
+        };
+
+        // Create table with sample data
+        DefaultTableModel model = new DefaultTableModel(data, columns);
+        JTable table = new JTable(model);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
+
+        // Inputs: JTextField (search) and two JComboBox (dropdowns)
+        JTextField searchField = new JTextField(15);
+        JComboBox<String> ageFilter = new JComboBox<>(new String[]{"All", "25", "30", "35", "40"});
+        JComboBox<String> countryFilter = new JComboBox<>(new String[]{"All", "USA", "UK", "Canada"});
+
+        // Panel for inputs
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Search:"));
+        panel.add(searchField);
+        panel.add(new JLabel("Age:"));
+        panel.add(ageFilter);
+        panel.add(new JLabel("Country:"));
+        panel.add(countryFilter);
+
+        // Action listener to update filter when any input changes
+        ActionListener updateFilter = e -> {
+            String searchText = searchField.getText().toLowerCase();
+            String selectedAge = ageFilter.getSelectedItem().toString();
+            String selectedCountry = countryFilter.getSelectedItem().toString();
+
+            RowFilter<Object, Object> rf = RowFilter.regexFilter("(?i)" + searchText, 0); // filter by search text in Name column
+
+            // Filter by age
+            if (!"All".equals(selectedAge)) {
+                rf = RowFilter.andFilter(rf, RowFilter.regexFilter("^" + selectedAge + "$", 1));
+            }
+
+            // Filter by country
+            if (!"All".equals(selectedCountry)) {
+                rf = RowFilter.andFilter(rf, RowFilter.regexFilter("^" + selectedCountry + "$", 2));
+            }
+
+            sorter.setRowFilter(rf);
+        };
+
+        // Attach listeners to inputs
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { updateFilter.actionPerformed(null); }
+            public void removeUpdate(DocumentEvent e) { updateFilter.actionPerformed(null); }
+            public void changedUpdate(DocumentEvent e) { updateFilter.actionPerformed(null); }
+        });
+
+        ageFilter.addActionListener(updateFilter);
+        countryFilter.addActionListener(updateFilter);
+
+        // Add components to frame
+        frame.add(panel, BorderLayout.NORTH);
+        frame.add(new JScrollPane(table), BorderLayout.CENTER);
+        frame.setVisible(true);
+    }
+}

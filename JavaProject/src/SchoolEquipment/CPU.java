@@ -8,12 +8,15 @@ package SchoolEquipment;
  *
  * @author ALJANN
  */
-public class Speakers extends Equipment {
-    public Speakers(String id, String name, String type, String condition,
+public class CPU extends Equipment {
+
+    public CPU(String id, String name, String type, String condition,
             String location, String quantity) {
         super(id, name, type, condition, location, quantity);
     }
-    public Speakers(String[] str) {
+    
+    public CPU(String[] str) {
         super(str);
     }
+    
 }

@@ -8,12 +8,12 @@ package SchoolEquipment;
  *
  * @author ALJANN
  */
-public class Speakers extends Equipment {
-    public Speakers(String id, String name, String type, String condition,
+public class Keyboard extends Equipment {
+    public Keyboard(String id, String name, String type, String condition,
             String location, String quantity) {
         super(id, name, type, condition, location, quantity);
     }
-    public Speakers(String[] str) {
+    public Keyboard(String[] str) {
         super(str);
     }
 }

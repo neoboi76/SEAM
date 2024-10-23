@@ -4,31 +4,30 @@
  */
 package GUI;
 
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import SchoolEquipment.Equipment;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
 
 /**
  *
  * @author ALJANN
  */
-public class insertGui extends JDialog {
+public class insertGui extends JDialog{
     JLabel id = new JLabel(), name = new JLabel(), 
             type = new JLabel(), condition = new JLabel(),
-            location = new JLabel(), quantity = new JLabel();
+            location = new JLabel(), quantity = new JLabel(), warningLabel = new JLabel();
     JTextField t1 = new JTextField(), t2 = new JTextField(),
             t3 = new JTextField(), t4 = new JTextField(),
             t5 = new JTextField(), t6 = new JTextField();
@@ -42,7 +41,7 @@ public class insertGui extends JDialog {
     
     private int num = 6;
     
-    public insertGui(MainGui mgui)
+    public insertGui(MainGui mgui, HashMap<String,Equipment> hm)
     {
         super((java.awt.Frame) null, true);
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
@@ -51,6 +50,11 @@ public class insertGui extends JDialog {
         setSize(400,400);
         setResizable(false);
         setTitle("Insert a Row");
+        
+        warningLabel.setText("");
+        warningLabel.setForeground(Color.red);
+        warningLabel.setFont(new Font(warningLabel.getFont().getName(), warningLabel.getFont().getStyle(), 10));
+        warningLabel.setBounds(150,-10,150,50);
         
         id.setText("ID: ");
         name.setText("Name: ");
@@ -61,10 +65,71 @@ public class insertGui extends JDialog {
         
         id.setBounds(75,30,60,20);
         t1.setBounds(150,30,150,25);
+        t1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty())
+                {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                }
+                else
+                {
+                    if (!checkDuplicate(hm, t1.getText()))
+                        warningLabel.setText("Duplicate ID");
+                    else if (!checkIfNotNumber(t1.getText()) && !t1.getText().isEmpty())
+                        warningLabel.setText("ID can only contain numbers");
+                    else
+                        warningLabel.setText("");
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty())
+                {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                }
+                else
+                {
+                    if (!checkDuplicate(hm, t1.getText()))
+                        warningLabel.setText("Duplicate ID");
+                    else if (!checkIfNotNumber(t1.getText()) && !t1.getText().isEmpty())
+                        warningLabel.setText("ID can only contain numbers");
+                    else
+                        warningLabel.setText("");
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty())
+                {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                }
+                else
+                {
+                    if (!checkDuplicate(hm, t1.getText()))
+                        warningLabel.setText("Duplicate ID");
+                    else if (!checkIfNotNumber(t1.getText()) && !t1.getText().isEmpty())
+                        warningLabel.setText("ID can only contain numbers");
+                    else
+                        warningLabel.setText("");
+                    enterButton.setEnabled(false);
+                    
+                }
+            }
+            
+        });
+        
         t1.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty() && (e.getKeyCode() == KeyEvent.VK_ENTER))
                 {
                     newS = parseToMainGui();
                     setVisible(false);
@@ -82,10 +147,44 @@ public class insertGui extends JDialog {
         
         name.setBounds(75,70,60,20);
         t2.setBounds(150,70,150,25);
+        t2.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } 
+                else 
+                {
+                    enterButton.setEnabled(false);
+                }
+            }
+
+        });
         t2.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty() && (e.getKeyCode() == KeyEvent.VK_ENTER))
                 {
                     newS = parseToMainGui();
                     setVisible(false);
@@ -108,33 +207,48 @@ public class insertGui extends JDialog {
            t3.setText(String.valueOf(equip.getSelectedItem()));
         });
         
-//        type.setBounds(75,110,60,20);
-//        t3.setBounds(150,110,150,25);
-//        t3.addKeyListener(new java.awt.event.KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                if (e.getKeyCode() == KeyEvent.VK_ENTER)
-//                {
-//                    newS = parseToMainGui();
-//                    setVisible(false);
-//                    dispose();
-//                    JOptionPane.showMessageDialog(null, "Row has been added.");
-//                }
-//                else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-//                {
-//                    newS = null;
-//                    setVisible(false);
-//                    dispose(); 
-//                }
-//            }
-//        });
         
         condition.setBounds(75,150,60,20);
         t4.setBounds(150,150,150,25);
+        t4.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+
+                    enterButton.setEnabled(false);
+                }
+            }
+
+        });
         t4.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty() && (e.getKeyCode() == KeyEvent.VK_ENTER))
                 {
                     newS = parseToMainGui();
                     setVisible(false);
@@ -157,33 +271,47 @@ public class insertGui extends JDialog {
            t5.setText(String.valueOf(locate.getSelectedItem()));
         });
         
-//        location.setBounds(75,190,60,20);
-//        t5.setBounds(150,190,150,25);
-//        t5.addKeyListener(new java.awt.event.KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                if (e.getKeyCode() == KeyEvent.VK_ENTER)
-//                {
-//                    newS = parseToMainGui();
-//                    setVisible(false);
-//                    dispose();
-//                    JOptionPane.showMessageDialog(null, "Row has been added.");
-//                }
-//                else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-//                {
-//                    newS = null;
-//                    setVisible(false);
-//                    dispose(); 
-//                }
-//            }
-//        });
-        
         quantity.setBounds(75,230,60,20);
         t6.setBounds(150,230,150,25);
+        t6.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+
+                    enterButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                    warningLabel.setText("");
+                    enterButton.setEnabled(true);
+                } else {
+
+                    enterButton.setEnabled(false);
+                }
+            }
+
+        });
         t6.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty() && (e.getKeyCode() == KeyEvent.VK_ENTER))
                 {
                     newS = parseToMainGui();
                     setVisible(false);
@@ -198,6 +326,7 @@ public class insertGui extends JDialog {
             }
         });
         
+        enterButton.setEnabled(false);
         enterButton.setFocusable(false);
         enterButton.setText("Enter");
         enterButton.setBounds(60,270,100,25);
@@ -217,6 +346,7 @@ public class insertGui extends JDialog {
             dispose();
         });
         
+        add(warningLabel);
         add(id);
         add(t1);
         add(name);
@@ -244,5 +374,31 @@ public class insertGui extends JDialog {
             s[i] = t[i].getText();
         }
         return s;
+    }
+    
+    public boolean checkDuplicate(HashMap<String,Equipment> eq, String update)
+    {
+        for (Map.Entry<String, Equipment> it : eq.entrySet()) {
+            if (it.getKey().contentEquals(update))
+                return false;
+        }
+        return true;
+    }
+    
+    public boolean checkIfNotNumber(String update)
+    {
+        String regex = "[0-9]+";
+        return update.matches(regex);
+    }
+    
+    public boolean checkTextFieldsNotEmpty()
+    {
+        JTextField[] t = {t1,t2,t3,t4,t5,t6};
+        for (JTextField text : t)
+        {
+            if (text.getText().isEmpty())
+                return false;
+        }
+        return true;
     }
 }

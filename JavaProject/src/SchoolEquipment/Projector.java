@@ -15,4 +15,9 @@ public class Projector extends Equipment {
         super(id, name, type, condition, location, quantity);
     }
 
+    public Projector(String[] str) {
+        super(str);
+    }
+    
+    
 }
