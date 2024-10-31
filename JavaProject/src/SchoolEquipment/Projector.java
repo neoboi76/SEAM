@@ -4,14 +4,34 @@
  */
 package SchoolEquipment;
 
+import java.util.HashMap;
+
 /**
  *
  * @author ALJANN
  */
 public class Projector extends Equipment {
-    public Projector(String name, String condition, String id, String location)
-    {
-        super(name, condition, id, location);
+    private static HashMap<String, Equipment> projectors = new HashMap<>();
+    private static HashMap<String, Equipment> failedProjectors = new HashMap<>();
+    
+    public Projector(String id, String name, String type, String condition,
+            String location, String quantity) {
+        super(id, name, type, condition, location, quantity);
     }
+
+    public Projector(String[] str) {
+        super(str);
+    }
+    
+    public Projector(Projector proj)
+    {
+        super(proj);
+    }
+
+    @Override
+    public Equipment duplication() {
+        return new Projector(this);
+    }
+    
     
 }

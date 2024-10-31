@@ -4,15 +4,30 @@
  */
 package SchoolEquipment;
 
+import java.util.HashMap;
+
 /**
  *
  * @author ALJANN
  */
 public class Speakers extends Equipment {
+    private static HashMap<String, Equipment> speakers = new HashMap<>();
+    private static HashMap<String, Equipment> failedSpeakers = new HashMap<>();
     
-    Speakers(String name, String condition, String id, String location)
-    {
-        super(name, condition, id, location);
+    public Speakers(String id, String name, String type, String condition,
+            String location, String quantity) {
+        super(id, name, type, condition, location, quantity);
     }
-    
+    public Speakers(String[] str) {
+        super(str);
+    }
+    public Speakers(Speakers speak)
+    {
+        super(speak);
+    }
+
+    @Override
+    public Equipment duplication() {
+        return new Speakers(this);
+    }
 }

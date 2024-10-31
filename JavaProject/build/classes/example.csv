@@ -1,0 +1,10 @@
+ID,Name,Type,Condition,Location,Quantity
+100,Jack,Printer,Good,MKT310,5
+200,Namco,Keyboard,Bad,MKT500,10
+300,Selaco,Computer,Excellent,MKT500,10
+400,,Computer,Decent,MKT501,12
+500,,Speakers,Decent,MKT602,12
+700,ShowMeTheMoney,Screen,Decent,MKT500,900
+800,ShowMeTheMoney,Computer,Decent,MKT500,900
+900,ShowMeTheMoney,Printer,Decent,MKT500,900
+1000,ShowMeTheMoney,Projector,Decent,MKT500,900
