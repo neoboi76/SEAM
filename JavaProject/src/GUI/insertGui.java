@@ -24,7 +24,7 @@ import javax.swing.event.DocumentEvent;
  *
  * @author ALJANN
  */
-public class insertGui extends JDialog{
+public class InsertGui extends JDialog{
     JLabel id = new JLabel(), name = new JLabel(), 
             type = new JLabel(), condition = new JLabel(),
             location = new JLabel(), quantity = new JLabel(), warningLabel = new JLabel();
@@ -32,16 +32,17 @@ public class insertGui extends JDialog{
             t3 = new JTextField(), t4 = new JTextField(),
             t5 = new JTextField(), t6 = new JTextField();
     JButton enterButton = new JButton(), cancelButton = new JButton();
-    JComboBox equip, locate;
+    JComboBox equip, locate, condi;
     
     String[] newS;
     
-    String[] dropdownEquipment = {"","Printer","Projector","Speakers","Computer","Monitor"};
+    String[] dropdownEquipment = {"","Printer","Projector","Speakers","Smartboard","Tablet"};
     String[] dropdownLocation = {"","MKT500","MKT310","MKT602"};
+    String[] dropdownCondition = {"","Excellent","Great","Good","Decent","Poor","Needs Replacement","Missing","Disposed"};
     
     private int num = 6;
     
-    public insertGui(MainGui mgui, HashMap<String,Equipment> hm)
+    public InsertGui(MainGui mgui, HashMap<String,Equipment> hm)
     {
         super((java.awt.Frame) null, true);
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
@@ -205,62 +206,27 @@ public class insertGui extends JDialog{
         equip.setBounds(150,110,150,25);
         equip.addItemListener((ItemEvent e) -> {
            t3.setText(String.valueOf(equip.getSelectedItem()));
+            if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                warningLabel.setText("");
+                enterButton.setEnabled(true);
+            } else {
+
+                enterButton.setEnabled(false);
+            }
         });
         
         
         condition.setBounds(75,150,60,20);
-        t4.setBounds(150,150,150,25);
-        t4.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
-                    warningLabel.setText("");
-                    enterButton.setEnabled(true);
-                } else {
+        condi = new JComboBox<>(dropdownCondition);
+        condi.setBounds(150,150,150,25);
+        condi.addItemListener((ItemEvent e) -> {
+            t4.setText(String.valueOf(condi.getSelectedItem()));
+            if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                warningLabel.setText("");
+                enterButton.setEnabled(true);
+            } else {
 
-                    enterButton.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
-                    warningLabel.setText("");
-                    enterButton.setEnabled(true);
-                } else {
-
-                    enterButton.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
-                    warningLabel.setText("");
-                    enterButton.setEnabled(true);
-                } else {
-
-                    enterButton.setEnabled(false);
-                }
-            }
-
-        });
-        t4.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText()) && checkTextFieldsNotEmpty() && (e.getKeyCode() == KeyEvent.VK_ENTER))
-                {
-                    newS = parseToMainGui();
-                    setVisible(false);
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "Row has been added.");
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                {
-                    newS = null;
-                    setVisible(false);
-                    dispose(); 
-                }
+                enterButton.setEnabled(false);
             }
         });
         
@@ -269,6 +235,13 @@ public class insertGui extends JDialog{
         locate.setBounds(150,190,150,25);
         locate.addItemListener((ItemEvent e) -> {
            t5.setText(String.valueOf(locate.getSelectedItem()));
+            if (checkTextFieldsNotEmpty() && checkIfNotNumber(t1.getText()) && checkDuplicate(hm, t1.getText())) {
+                warningLabel.setText("");
+                enterButton.setEnabled(true);
+            } else {
+
+                enterButton.setEnabled(false);
+            }
         });
         
         quantity.setBounds(75,230,60,20);
@@ -354,7 +327,7 @@ public class insertGui extends JDialog{
         add(type);
         add(equip);
         add(condition);
-        add(t4);
+        add(condi);
         add(location);
         add(locate);
         add(quantity);
@@ -364,6 +337,13 @@ public class insertGui extends JDialog{
         setLocationRelativeTo(null);
     }
     
+    /**
+     * Collects the String inputs from the Input GUI and passes them back
+     * to the Main GUI for further usage.
+     * 
+     * 
+     * @return String[] = returns the array of String schema for the row index
+     */
     public String[] parseToMainGui()
     {
         String[] s = new String[num];
@@ -376,6 +356,14 @@ public class insertGui extends JDialog{
         return s;
     }
     
+    /**
+     * Checks if the String input already exists in the hashmap of table data.
+     * 
+     * @param eq
+     * @param update
+     * @return false = if duplicate exists
+     *
+     */
     public boolean checkDuplicate(HashMap<String,Equipment> eq, String update)
     {
         for (Map.Entry<String, Equipment> it : eq.entrySet()) {
@@ -385,12 +373,22 @@ public class insertGui extends JDialog{
         return true;
     }
     
+    /**
+     * Checks if the ID string has non-numerical characters. ID can only be written
+     * as a numerical string.
+     * @param update
+     * @return false = if there are non-numerical characters in the string
+     */
     public boolean checkIfNotNumber(String update)
     {
         String regex = "[0-9]+";
         return update.matches(regex);
     }
     
+    /**
+     * Checks if the input fields are empty or not.
+     * @return false = if one or more fields are empty
+     */
     public boolean checkTextFieldsNotEmpty()
     {
         JTextField[] t = {t1,t2,t3,t4,t5,t6};

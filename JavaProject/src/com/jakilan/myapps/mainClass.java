@@ -36,8 +36,8 @@ public class mainClass  {
          */
 //        loginSecondGUI login = new loginSecondGUI();
 
-        int checking;
-        loginGUI login = new loginGUI();
+//        int checking;
+//        loginGUI login = new loginGUI();
         
         
         /*
@@ -45,21 +45,21 @@ public class mainClass  {
         from being a loop. if no thread.sleep no 100 grade.
         */
         
-        while(true)
-        {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if (login.getTries() == 0)
-                System.exit(0);
-            else if (login.isCorrect() == true)
-            {
-                    login.getFrame().dispose();
-                    break;
-            }
-        }
+//        while(true)
+//        {
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            if (login.getTries() == 0)
+//                System.exit(0);
+//            else if (login.isCorrect() == true)
+//            {
+//                    login.getFrame().dispose();
+//                    break;
+//            }
+//        }
         
         //this is the main GUI/JFrame and the bulk of the program
         //technically we can call the constructor instead of assigning it

@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class EquipmentFactory {
     
-    public ArrayList<Equipment> createEquipmentsFromFile(CSVreader csv)
+    public ArrayList<Equipment> createArrayListEquipFromFile(CSVreader csv)
     {
         ArrayList<Equipment> equipments = new ArrayList<>();
         
@@ -23,11 +23,11 @@ public class EquipmentFactory {
         {
             switch(s[2])
             {
-                case "Computer" -> equipments.add(new Computer(s));
+                case "Smartboard" -> equipments.add(new Smartboard(s));
                 case "Projector" -> equipments.add(new Projector(s));
                 case "Speakers" -> equipments.add(new Speakers(s));
-                case "CPU" -> equipments.add(new CPU(s));
-                case "Keyboard" -> equipments.add(new Keyboard(s));
+                case "Printer" -> equipments.add(new Printer(s));
+                case "Tablet" -> equipments.add(new Tablet(s));
                 default -> JOptionPane.showMessageDialog(null, "Invalid Type!", "INVALID TYPE", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -35,20 +35,20 @@ public class EquipmentFactory {
     }
     public HashMap<String,Equipment> createHashMapEquipFromFile(CSVreader csv) {
         HashMap<String,Equipment> hashEq = new HashMap<>();
-        Equipment e = null;
+        Equipment e;
 
         for (String[] s : csv.getTableRow()) {
             switch (s[2]) {
-                case "Computer" ->
-                    e = new Computer(s);
+                case "Smartboard" ->
+                    e = new Smartboard(s);
                 case "Projector" ->
                     e = new Projector(s);
                 case "Speakers" ->
                     e = new Speakers(s);
-                case "CPU" ->
-                    e = new CPU(s);
-                case "Keyboard" ->
-                    e = new Keyboard(s);
+                case "Printer" ->
+                    e = new Printer(s);
+                case "Tablet" ->
+                    e = new Tablet(s);
                 default ->
                 {
                     e = null;
@@ -66,11 +66,11 @@ public class EquipmentFactory {
         Equipment e = null;
         switch (s[2]) 
         {
-            case "Computer" -> e = new Computer(s);
+            case "Smartboard" -> e = new Smartboard(s);
             case "Projector" -> e = new Projector(s);
             case "Speakers" -> e = new Speakers(s);
-            case "CPU" -> e = new CPU(s);
-            case "Keyboard" -> e =  new Keyboard(s);
+            case "Printer" -> e = new Printer(s);
+            case "Tablet" -> e =  new Tablet(s);
             default -> JOptionPane.showMessageDialog(null, "Invalid Type!", "INVALID TYPE", JOptionPane.ERROR_MESSAGE);
         }
         return e;

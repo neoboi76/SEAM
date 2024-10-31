@@ -5,24 +5,46 @@
 package SchoolRooms;
 
 import SchoolEquipment.Equipment;
-import java.util.HashMap;
+import SeamImplements.IRoom;
 
 /**
  *
  * @author ALJANN
  */
-public class Room {
-    private String name;
+public abstract class Room implements IRoom {
+    private String name; //"MKT500", "MKT310", "MKT602"
     private String number;
     private String floorId;
-    private int floorNumber;
-    private HashMap<String,Equipment> hashEq = new HashMap<>();
-    private int equipmentCount = hashEq.size();
+    private int capacity;
 
-    public Room(String name, String number, String floorId, int floorNumber) {
+    public Room(String name, String number, String floorId, int capacity) {
         this.name = name;
         this.number = number;
         this.floorId = floorId;
-        this.floorNumber = floorNumber;
+        this.capacity = capacity;
     }
+    
+    public abstract void populateTheRoom(Equipment equip);
+    
+    public abstract void depopulateTheRoom(Equipment equip);
+    
+    public abstract void clearTheRoom();
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+    
+    
 }

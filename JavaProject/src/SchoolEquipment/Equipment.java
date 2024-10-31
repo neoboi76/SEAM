@@ -39,6 +39,23 @@ public abstract class Equipment {
         this.location = str[4];
         this.quantity = str[5];
     }
+    
+    public Equipment(Equipment equip)
+    {
+        if (equip!=null)
+        {
+            this.id = equip.id;
+            this.name = equip.name;
+            this.type = equip.type;
+            this.condition = equip.condition;
+            this.location = equip.location;
+            this.quantity = equip.quantity;   
+        }
+    }
+    
+   
+    public abstract Equipment duplication();
+    
     public void displayReport()
     {
         System.out.println("ID: " + this.id + " Name: " + this.name + " Type: " + this.type
@@ -48,6 +65,23 @@ public abstract class Equipment {
     @Override
     public String toString() {
         return id + "," + name + "," + type + "," + condition + "," + location + "," + quantity + '\n';
+    }
+    
+    /**
+     * Standard function that describes the details of a specific equipment
+     * 
+     * 
+     * @return String = a description of the specific equipment's details
+     */
+    public String equipmentDetails()
+    {
+        return 
+                "Id: " + id + '\n' +
+                "Name of Equipment: " + name + '\n' +
+                "Equipment Type: " + type + '\n' +
+                "Condition: " + condition + '\n' +
+                "Located in Room: " + location + '\n' +
+                "Date Stored: " + '\n';
     }
     
     public String[] returnArrayOfStrings()
@@ -63,6 +97,13 @@ public abstract class Equipment {
         return s;
     }
     
+    /**
+     * Accrues the return String with ready-made CSV String for easy transfer
+     * into the CSVwriter class.
+     * 
+     * @param hash
+     * @return the accrued CSV string ready for translation into .csv file
+     */
     public static String writeToCSV(HashMap<String,Equipment> hash)
     {
         String collate = "";
@@ -73,4 +114,32 @@ public abstract class Equipment {
         
         return collate;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+    
+    
+    
+    
 }
