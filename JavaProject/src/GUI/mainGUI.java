@@ -9,6 +9,7 @@
 package GUI;
 
 import CSV.CSVreader;
+import CSV.CSVwriter;
 import CSV.SingleFileRootViewer;
 import SchoolEquipment.Equipment;
 import SchoolEquipment.EquipmentFactory;
@@ -69,8 +70,10 @@ import javax.swing.table.TableRowSorter;
 public class MainGui {
     //initializing CSVreader components
     private CSVreader reader;
+    private CSVwriter writer = new CSVwriter();
     private String file = "src\\sample.csv";
     private String realFile = "";
+    private String openedFile = "";
     
     //initializing factory design patterns
     EquipmentFactory ef = new EquipmentFactory();
@@ -307,7 +310,6 @@ public class MainGui {
         duplicateButton.setEnabled(false);
         saveButton.setPreferredSize(new Dimension(80,52));
         saveButton.setDisabledIcon(save.getBlack());
-        saveButton.setEnabled(false);
         deleteButton.setPreferredSize(new Dimension(80,52));
         deleteButton.setDisabledIcon(delete.getBlack());
         deleteButton.setEnabled(false);
@@ -353,12 +355,25 @@ public class MainGui {
             });
         });
         
+        saveButton.addActionListener((e) -> {
+           if (!equipmentHashmap.isEmpty()) 
+           {
+               writer.saveFile(openedFile, equipmentHashmap);
+           }
+           else
+                JOptionPane.showMessageDialog(null, "Table is empty!", "Empty Table!", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
         duplicateButton.addActionListener((e)-> {
-            String choice = JOptionPane.showInputDialog(eastOne, save, file, roomNumber);
-            try {
-                
-            } catch (Exception a) {
-                a.printStackTrace();
+            if (!equipmentHashmap.isEmpty())
+            {
+                String s = (String) dtm.getValueAt(tb.convertRowIndexToModel(tb.getSelectedRow()), tb.convertColumnIndexToModel(0));
+                Equipment eq = equipmentHashmap.get(s).duplication();
+                eq.setId(String.valueOf(maxKey()));
+                equipmentHashmap.put(eq.getId(), eq);
+                dtm.addRow(eq.equipArray());
+                rp.populateRoomEq(eq, MKT500, MKT310, MKT602);
+                System.out.println(eq.toString());
             }
         });
         
@@ -371,7 +386,21 @@ public class MainGui {
         
         exportButton.addActionListener((e) ->{
             if (!equipmentHashmap.isEmpty())
-                new ExportGui(equipmentHashmap);
+            {
+                String fName = JOptionPane.showInputDialog("Enter Filename");
+                
+                if (writer.fileExists(fName))
+                {
+                    int approve = JOptionPane.showConfirmDialog(null, "Filename already exists! Overwrite?", "Existing Filename", JOptionPane.YES_NO_OPTION);
+                    if (approve == JOptionPane.YES_OPTION)
+                    {
+                        writer.writeFile(fName, equipmentHashmap);
+                    }
+                }
+                else
+                        writer.writeFile(fName, equipmentHashmap);
+
+            }
             else
                 JOptionPane.showMessageDialog(null, "No rows to export!", "Empty Table!", JOptionPane.INFORMATION_MESSAGE);
 
@@ -384,13 +413,13 @@ public class MainGui {
                 fileChooser.setFileFilter(allowedFiles);
                 fileChooser.setAcceptAllFileFilterUsed(false);
                 int open = fileChooser.showOpenDialog(null);
-                String root2;
 
                 if (open == JFileChooser.APPROVE_OPTION)
                 {
                     resetValues();
-                    root2 = fileChooser.getSelectedFile().getAbsolutePath();
-                    reader = new CSVreader(root2);
+                    openedFile = fileChooser.getSelectedFile().getAbsolutePath();
+                    System.out.println(openedFile);
+                    reader = new CSVreader(openedFile);
                     equipmentHashmap = ef.createHashMapEquipFromFile(reader);
                     rp.populateRoomHashMap(equipmentHashmap, MKT500, MKT310, MKT602);
 //                    dtm.setRowCount(0);
@@ -451,7 +480,7 @@ public class MainGui {
             int choice = JOptionPane.showConfirmDialog(null, "Do you want to delete this row?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 String deleted = (String) dtm.getValueAt(tb.convertRowIndexToModel(tb.getSelectedRow()), tb.convertColumnIndexToModel(0));
-                rp.depopulateRoomHashMap(equipmentHashmap.get(deleted), MKT310, MKT310, MKT310);
+                rp.depopulateRoomHashMap(equipmentHashmap.get(deleted), MKT500, MKT310, MKT602);
                 equipmentHashmap.remove((String) dtm.getValueAt(tb.convertRowIndexToModel(tb.getSelectedRow()), tb.convertColumnIndexToModel(0)));
                 dtm.removeRow(tb.convertRowIndexToModel(tb.getSelectedRow()));
                 deleteButton.setIcon(delete.getOriginal());
@@ -536,7 +565,7 @@ public class MainGui {
                 if (tb.getSelectionModel().isSelectionEmpty() == false)
                 {
                     duplicateButton.setIcon(duplicate.getGlow());
-                    updateLabel.setText("");
+                    updateLabel.setText("Create selected row copies");
                 }
             }
             
@@ -552,21 +581,18 @@ public class MainGui {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
-                if (tb.getSelectionModel().isSelectionEmpty() == false)
-                {
-                    saveButton.setIcon(save.getGlow());
-                    updateLabel.setText("Save's current session table");
-                }
+
+                saveButton.setIcon(save.getGlow());
+                updateLabel.setText("Save's current session table");
             }
             
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt)
             {
-                if (tb.getSelectionModel().isSelectionEmpty() == false)
-                {
-                    saveButton.setIcon(save.getOriginal());
-                    updateLabel.setText("");
-                }
+
+                saveButton.setIcon(save.getOriginal());
+                updateLabel.setText("");
+
             }
         });
         exportButton.addMouseListener(new java.awt.event.MouseAdapter()
@@ -869,9 +895,9 @@ public class MainGui {
         equipmentHashmap.clear();
         rp.clearRoomHashMap(MKT500, MKT310, MKT602);
     }
-    public String maxKey()
+    public int maxKey()
     {
-        return Collections.max(equipmentHashmap.entrySet(), Map.Entry.comparingByKey()).getKey();
+        return Integer.parseInt(Collections.max(equipmentHashmap.entrySet(), Map.Entry.comparingByKey()).getKey())+1;
     }
     public void printing(String str) {
         for (int i = 0; i < tb.getRowCount(); i++) {

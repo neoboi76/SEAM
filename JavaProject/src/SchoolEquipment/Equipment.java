@@ -56,6 +56,12 @@ public abstract class Equipment {
    
     public abstract Equipment duplication();
     
+    public String[] equipArray()
+    {
+        String[] s = {this.id,this.name,this.type,this.condition,this.location,this.quantity};
+        return s;
+    }
+    
     public void displayReport()
     {
         System.out.println("ID: " + this.id + " Name: " + this.name + " Type: " + this.type
@@ -138,8 +144,9 @@ public abstract class Equipment {
     public String getQuantity() {
         return quantity;
     }
-    
-    
-    
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
 }

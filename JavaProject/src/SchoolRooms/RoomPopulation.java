@@ -29,11 +29,26 @@ public class RoomPopulation {
             }
         }
     }
+    public void populateRoomEq(Equipment equip, Room one, Room two, Room three)
+    {
+        
+        switch (equip.getLocation()) {
+            case "MKT500" ->
+                one.populateTheRoom(equip);
+            case "MKT310" ->
+                two.populateTheRoom(equip);
+            case "MKT602" ->
+                three.populateTheRoom(equip);
+            default ->
+                JOptionPane.showMessageDialog(null, "Invalid Type!", "INVALID TYPE", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
     
     public void depopulateRoomHashMap(Equipment equip, Room one, Room two, Room three)
     {
          
-        switch (equip.getId()) {
+        switch (equip.getLocation()) {
             case "MKT500" ->
                 one.depopulateTheRoom(equip);
             case "MKT310" ->
@@ -52,4 +67,6 @@ public class RoomPopulation {
         two.clearTheRoom();
         three.clearTheRoom();
     }
+    
+    
 }

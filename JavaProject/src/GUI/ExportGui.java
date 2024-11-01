@@ -7,7 +7,6 @@ package GUI;
 import CSV.CSVwriter;
 import SchoolEquipment.Equipment;
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -78,6 +77,8 @@ public class ExportGui extends JDialog{
         enterButton.setBounds(125,100,100,35);
         enterButton.setFocusable(false);
         enterButton.setText("Enter");
+
+        
         cancelButton.setBounds(275,100,100,35);
         cancelButton.setFocusable(false);
         cancelButton.setText("Cancel");

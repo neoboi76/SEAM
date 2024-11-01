@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import org.sqlite.util.StringUtils;
 
 
 /**
@@ -143,7 +144,6 @@ public class CSVreader {
             while ((line = br.readLine()) != null) {
                 tableRow.add(line.split(","));
             }
-
             rows = tableRow.toArray(String[][]::new);
             errorRow = failedRecords(tableRow);
             tableRow = verifyRecords(tableRow);
@@ -154,10 +154,5 @@ public class CSVreader {
         }
     }
     
-    public boolean verifyCSV()
-    {
-        
-        
-        return true;
-    }
+            
 }

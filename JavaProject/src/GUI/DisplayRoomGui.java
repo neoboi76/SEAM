@@ -51,6 +51,14 @@ public class DisplayRoomGui extends JDialog {
         StyleConstants.setAlignment(att, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), att, false);
         textPane.setText(room.listOfEquipments());
+        try {
+            if (room.listOfEquipments().isEmpty())
+                textPane.setText("\nThere are no equipments yet!\n");
+            else
+                textPane.setText(room.listOfEquipments());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         textPane.setEditable(false);
         scrollPane = new JScrollPane(textPane);
         

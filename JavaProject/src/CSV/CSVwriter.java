@@ -22,7 +22,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 public class CSVwriter {
     FileWriter fw;
     File folder = new File("./src");
-    FileFilter fileFilter = new WildcardFileFilter("*.csv", IOCase.INSENSITIVE);
+//    FileFilter fileFilter = new WildcardFileFilter("*.csv", IOCase.INSENSITIVE);
     File[] files = folder.listFiles();
     String columns = "ID,Name,Type,Condition,Location,Quantity\n";
     
@@ -46,7 +46,7 @@ public class CSVwriter {
         return fNames.stream().anyMatch((string+".csv")::equals);
     }
     
-    public void somethingHappens(String fileLocation, HashMap<String,Equipment> hm)
+    public void writeFile(String fileLocation, HashMap<String,Equipment> hm)
     {
         try {
             fw = new FileWriter("src/" + fileLocation + ".csv");
@@ -55,6 +55,19 @@ public class CSVwriter {
             fw.close();
             JOptionPane.showMessageDialog(null, "Successfully written to file", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void saveFile(String fileLocation, HashMap<String,Equipment> hm)
+    {
+        try {
+            fw = new FileWriter(fileLocation);
+            fw.write(columns);
+            fw.write(Equipment.writeToCSV(hm));
+            fw.close();
+            JOptionPane.showMessageDialog(null, "Successfully written to file", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
