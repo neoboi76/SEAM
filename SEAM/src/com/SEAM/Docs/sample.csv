@@ -1,0 +1,10 @@
+ID,Name,Type,Condition,Location,Quantity
+1,Samsung,Tablet,Excellent,MKT500,1
+2,HP,Printer,Poor,MKT310,5
+3,Panasonic,Speakers,Good,MKT602,7
+4,LG,Smartboard,Decent,MKT500,9
+5,Sony,Projector,Poor,MKT310,12
+6,Apple,Tablet,Needs Replacement,MKT602,14
+7,Canon,Printer,Missing,MKT500,17
+8,Sony,Speakers,Disposed,MKT310,19
+9,HP,Printer,Poor,MKT310,5

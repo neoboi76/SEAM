@@ -1,0 +1,43 @@
+equipment FINAL:
+
+smartboard
+projector
+printer
+speakers
+tablets
+
+equipments = factory design
+JButtons = builder design
+
+
+TOMORROW FRIDAY 25 2024
+
+TO DO THINGS IN JAVA
+
+1. DETERMINE A WAY TO VERIFY ID'S IF DUPLICATE - done
+2. FINALIZE ROOM CLASS AND SUBCLASSES
+3. ADD A JOPTIONPANE/JDIALOG TO EXPORT BUTTON - partly done
+4. ADD A JOPTIONPANE/JDIALOG TO REPORT BUTTON - partly done 
+5. ADD DATE AND TIME
+
+
+Condition markers:
+
+1. Excellent
+2. Great
+3. Good
+4. Decent
+5. Poor
+6. Needs Replacement
+7. Missing
+1	CETA INK	Printer	Excellent	MKT500	12
+
+
+v2
+-removed class "testingClass"
+-removed class "notMainGui"
+-removed class "displayOneGui"
+-removed class "mainGuiButton"
+-removed class "mainFrame"
+-added getters to ReferenceObject class (also changed encapsulation from public to private)
+-added class "EquipmentConditionGui"

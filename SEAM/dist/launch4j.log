@@ -1,0 +1,20 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\ALJANN\Documents\NetBeansProjects\SchoolEquipmentAcquisitionMonitoring\dist\SEAM.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\ALJANN\Documents\NetBeansProjects\SchoolEquipmentAcquisitionMonitoring\dist\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Eclipse Adoptium\jdk-11.0.24.8-hotspot\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\dotnet\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Calibre2\;C:\ProgramData\chocolatey\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\ALJANN\AppData\Local\Programs\Python\Launcher\;C:\Users\ALJANN\AppData\Local\Microsoft\WindowsApps;C:\ffmpeg;C:\msys64\ucrt64\bin;C:\Users\ALJANN\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ALJANN\AppData\Local\Programs\Python\Python312;C:\Users\ALJANN\AppData\Local\Programs\Python\Python312\Scripts;C:\Users\ALJANN\AppData\Local\Microsoft\WindowsApps;C:\tools\neovim\nvim-win64\bin;;C:\Program Files\Eclipse Adoptium\jdk-11.0.24.8-hotspot\bin
+JRE paths:	;C:\Program Files\Eclipse Adoptium\jdk-11.0.24.8-hotspot\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\dotnet\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Calibre2\;C:\ProgramData\chocolatey\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\ALJANN\AppData\Local\Programs\Python\Launcher\;C:\Users\ALJANN\AppData\Local\Microsoft\WindowsApps;C:\ffmpeg;C:\msys64\ucrt64\bin;C:\Users\ALJANN\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ALJANN\AppData\Local\Programs\Python\Python312;C:\Users\ALJANN\AppData\Local\Programs\Python\Python312\Scripts;C:\Users\ALJANN\AppData\Local\Microsoft\WindowsApps;C:\tools\neovim\nvim-win64\bin;;C:\Program Files\Eclipse Adoptium\jdk-11.0.24.8-hotspot\bin
+Check launcher:	C:\Program Files\Eclipse Adoptium\jdk-11.0.24.8-hotspot\bin\javaw.exe (OK)
+Version string: 1.011.000_024 / 64-Bit (OK)
+Launcher:	C:\Program Files\Eclipse Adoptium\jdk-11.0.24.8-hotspot\bin\javaw.exe
+Launcher args:	-jar "C:\Users\ALJANN\Documents\NetBeansProjects\SchoolEquipmentAcquisitionMonitoring\dist\SEAM.exe"
+Args length:	100/32768 chars
+Exit code:	0
